@@ -47,7 +47,7 @@ wget https://archive.org/download/stackexchange/coffee.stackexchange.com.7z
 
 wget http://www.mysqltutorial.org/wp-content/uploads/2018/03/mysqlsampledatabase.zip
 
-wget https://raw.githubusercontent.com/benjaco-edu/db-assignment-6-perfomacne/master/CreateTables.sql
+wget https://raw.githubusercontent.com/radeonxray/DB-Assignment6/master/CreateTables.sql
 ```
 
 
