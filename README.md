@@ -112,6 +112,8 @@ INNER JOIN offices ON offices.officeCode = employees.officeCode
 WHERE customers.city = offices.city
 ```
 
+![ex1](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex1.png)
+
 ### Review:
 * Are you able to use the query?
 * Do you have the same explanation?
@@ -130,6 +132,7 @@ Create index office_city ON offices (city);
 Create index customer_city ON customers (city);
 ```
 
+![Ex2](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex2.png)
 ### Review:
 * Are you able to reproduce the speedup?
 * Do you agree with the explanation?
@@ -156,6 +159,8 @@ GROUP BY offices.officeCode
 ORDER BY paymentPrice DESC;
 ```
 
+![Ex3.1](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex3.1.png)
+
 Using Windowing
 ```mysql
 select offices.city as "officeCity", e.firstName as "employ", c.customerName, p.paymentDate, p.amount,
@@ -167,6 +172,8 @@ left join customers c on e.employeeNumber = c.salesRepEmployeeNumber
 left join payments p on c.customerNumber = p.customerNumber
 where p.amount is not null;
 ```
+
+![Ex3.2](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex3.2.png)
 
 ### Review:
 * Are you able to reproduce the difference?
@@ -188,6 +195,9 @@ In the stackexchange forum for coffee (coffee.stackexchange.com), write a query 
 use stackoverflow;
 select Title from posts where Title like "%grounds%";
 ```
+
+![Ex4.1](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex4.1.png)
+![Ex4.2](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex4.2.png)
 
 ### Review:
 * Are you able to verify there is no major difference?
@@ -218,6 +228,8 @@ left join users on users.Id = posts.OwnerUserId
 where match(Title) against('+grounds' IN BOOLEAN MODE);
 
 ```
+
+![Ex5](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex5.png)
 
 ### Review:
 * Are you able to reproduce the difference?
