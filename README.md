@@ -1,7 +1,102 @@
 # DB-Assignment6
-Database Assignment 6
+[Database Assignment 6](https://github.com/datsoftlyngby/soft2019spring-databases/blob/master/assignments/assignment6.md)
 
--------------------------
+------
+### Pre-setup
+Remember to `stop` any previous containers that are running on port 3306 
+
+`docker stop [container]`
+
+Command to see containers:
+
+```
+docker ps
+docker ls
+docker container ls --all
+```
+
+------
+## Setup
+
+#### The Docker Container
+Assignment done using Vagrant, Docker and Workbench
+
+Run the following command with Docker to create the container:
+
+`docker run --name my_db6mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=iphone2019 -d mysql`
+
+
+Access the Docker container:
+
+`docker exec -it my_db6mysql bash`
+
+
+Within the Docker Container, run the following 2 commands to update the container and download 7zip:
+
+```shell
+apt-get update
+
+apt-get install wget p7zip-full -y
+```
+
+
+Download the Data **Heads-up: You might want to start making some coffee while the data is being downloaded**:
+
+```
+wget https://archive.org/download/stackexchange/coffee.stackexchange.com.7z
+
+wget http://www.mysqltutorial.org/wp-content/uploads/2018/03/mysqlsampledatabase.zip
+
+wget https://raw.githubusercontent.com/benjaco-edu/db-assignment-6-perfomacne/master/CreateTables.sql
+```
+
+
+Extract the Data **Heads-up: You might want to start running a marathon while the data is being extracted**:
+
+```
+7z e coffee.stackexchange.com.7z 
+unzip mysqlsampledatabase.zip
+```
+
+-----
+
+#### Connect to the Database through WorkBench
+
+To connect to the Database through Workbench, make sure you have the latest version of the [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+
+My Default information to connect to the Docker Container:
+
+*IP*: `192.168.33.10`
+
+*Port*: `3306`
+
+*User*: `root`
+
+*Password*: `iphone2019`
+
+-----
+
+#### Setup Mysql And The Database 
+
+Place your Terminal/Bash in the previously created Workspace-directory in your Container.
+
+Start MySQL in the container:
+
+`mysql -u root -piphone2019 --local-infile`
+
+When inside the mysql:
+
+```
+source ./CreateTables.sql;
+source ./mysqlsampledatabase.sql
+
+use classicmodels;
+```
+
+
+
+
+-----
 
 ## Excercise 1
 
@@ -59,6 +154,18 @@ INNER JOIN employees ON customers.salesRepEmployeeNumber = employees.employeeNum
 INNER JOIN offices ON employees.officeCode = offices.officeCode
 GROUP BY offices.officeCode
 ORDER BY paymentPrice DESC;
+```
+
+Using Windowing
+```mysql
+select offices.city as "officeCity", e.firstName as "employ", c.customerName, p.paymentDate, p.amount,
+sum(p.amount) over (partition by offices.officeCode) as "sumForOffice",
+max(p.amount) over (partition by offices.officeCode) as "maxForOffice"
+from offices
+left join employees e on offices.officeCode = e.officeCode
+left join customers c on e.employeeNumber = c.salesRepEmployeeNumber
+left join payments p on c.customerNumber = p.customerNumber
+where p.amount is not null;
 ```
 
 ### Review:
