@@ -37,6 +37,8 @@ Within the Docker Container, run the following 2 commands to update the containe
 apt-get update
 
 apt-get install wget p7zip-full -y
+
+apt-get install unzip
 ```
 
 
