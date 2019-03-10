@@ -114,6 +114,11 @@ WHERE customers.city = offices.city
 
 ![ex1](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex1.png)
 
+**The Performance issue**
+
+The issue is that the biggest cost comes at the Non-UniqueKey Lookup for customers salesRepEmployeeeNumber
+
+
 ### Review:
 * Are you able to use the query?
 * Do you have the same explanation?
@@ -133,6 +138,12 @@ Create index customer_city ON customers (city);
 ```
 
 ![Ex2](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex2.png)
+
+**Changes to increase performance**
+
+Added indexes for office_city on the office table  customer_city on the customer table.
+With this slight change, using the unqiue indexes the cities and also the employees primary key, there is no need for the salesRepEmployeeNumber lookup.
+
 ### Review:
 * Are you able to reproduce the speedup?
 * Do you agree with the explanation?
@@ -175,6 +186,10 @@ where p.amount is not null;
 
 ![Ex3.2](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex3.2.png)
 
+**Thoughts on performance**
+
+Based on the graphs, it would seem like the window is slower since it has to handle a bigger result set, though in its defense, it is not trying to calculate each row.
+
 ### Review:
 * Are you able to reproduce the difference?
 * Do you agree with the explanation?
@@ -191,6 +206,7 @@ In the stackexchange forum for coffee (coffee.stackexchange.com), write a query 
 * Hand in the query. Show the execution plan for the query (if you cannot get the graphical, show the tabular).
 * Document that there is no real cost to the join to get the display name instead of just the userid. You can do that by running an other query with no join and then show that there is no major difference.
 
+Starting with the following to see without a join:
 ```mysql
 use stackoverflow;
 select Title from posts where Title like "%grounds%";
@@ -198,12 +214,17 @@ select Title from posts where Title like "%grounds%";
 
 ![Ex4.1](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex4.1.png)
 
+
+Then we see the performance with a join:
 ```mysql
 select Title, DisplayName from posts
 left join users on users.Id = posts.OwnerUserId
 where Title like "%grounds%";
 ```
 ![Ex4.2](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex4.2.png)
+
+**Performance thoughts**
+Not that big performance difference between the two approaches.
 
 ### Review:
 * Are you able to verify there is no major difference?
@@ -221,21 +242,26 @@ Add a full text index to the `posts` table and change the query from exercise 4 
 	* in particular your choice between a "natural language" full-text search and a "boolean" full-text search.
 * documentation of efficiency in the form of an execution plan
 
+Adding to the Index:
 ```mysql
 create fulltext index idx_posts_Title
   on posts (Title);
 ```
 
-Then
+After that, some modifications are in order to use the index, including a new filter function.
 
 ```mysql
 select Title, DisplayName from posts
 left join users on users.Id = posts.OwnerUserId
 where match(Title) against('+grounds' IN BOOLEAN MODE);
-
 ```
+*what is the boolean-mode?*
+The boolean means that words can be required by adding a + in the front of a word, an vice versa be deselected by adding a - in front of the word.
 
+The final graph results:
 ![Ex5](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex5.png)
+
+The final result is greatly increased performance, thanks to the ability to directly acces the word, instead of checking each row.
 
 ### Review:
 * Are you able to reproduce the difference?
