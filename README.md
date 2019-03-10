@@ -197,6 +197,12 @@ select Title from posts where Title like "%grounds%";
 ```
 
 ![Ex4.1](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex4.1.png)
+
+```mysql
+select Title, DisplayName from posts
+left join users on users.Id = posts.OwnerUserId
+where Title like "%grounds%";
+```
 ![Ex4.2](https://github.com/radeonxray/DB-Assignment6/blob/master/Ex4.2.png)
 
 ### Review:
