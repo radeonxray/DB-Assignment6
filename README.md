@@ -185,7 +185,8 @@ In the stackexchange forum for coffee (coffee.stackexchange.com), write a query 
 * Document that there is no real cost to the join to get the display name instead of just the userid. You can do that by running an other query with no join and then show that there is no major difference.
 
 ```mysql
-SELECT DisplayName, Title FROM posts INNER JOIN users ON posts.OwnerUserId = users.Id where Title LIKE '%grounds%' 
+use stackoverflow;
+select Title from posts where Title like "%grounds%";
 ```
 
 ### Review:
@@ -205,14 +206,16 @@ Add a full text index to the `posts` table and change the query from exercise 4 
 * documentation of efficiency in the form of an execution plan
 
 ```mysql
-ALTER TABLE posts  
-ADD FULLTEXT(Title)
+create fulltext index idx_posts_Title
+  on posts (Title);
 ```
 
 Then
 
 ```mysql
-SELECT DisplayName, Title FROM posts INNER JOIN users ON posts.OwnerUserId = users.Id WHERE MATCH(Title) AGAINST ('grounds' IN natural language mode)
+select Title, DisplayName from posts
+left join users on users.Id = posts.OwnerUserId
+where match(Title) against('+grounds' IN BOOLEAN MODE);
 
 ```
 
