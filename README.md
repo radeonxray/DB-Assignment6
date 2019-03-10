@@ -80,8 +80,6 @@ My Default information to connect to the Docker Container:
 
 #### Setup Mysql And The Database 
 
-Place your Terminal/Bash in the previously created Workspace-directory in your Container.
-
 Start MySQL in the container:
 
 `mysql -u root -piphone2019 --local-infile`
